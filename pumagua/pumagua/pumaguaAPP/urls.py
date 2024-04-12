@@ -7,5 +7,6 @@ app_name = "pumaguaAPP"
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index, name='Home')
+    path('', views.index, name='Home'),
+    path('informes/', views.informes, name='info')
 ]
