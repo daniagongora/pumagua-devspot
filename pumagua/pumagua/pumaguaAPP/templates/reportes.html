@@ -1,0 +1,43 @@
+{% block body %}
+<form method="POST" class="formulario-report" id="report-form">
+{% csrf_token %}
+<h2 class="text-center">Generar un reporte</h2>
+<br>
+<div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">Nombre</label>
+    <input type="nombre" class="form-control" name="nombre">
+</div>
+<div class="mb-3">
+    <label for="exampleInputPassword1" class="form-label">Email</label>
+    <input type="email" class="form-control" name="email">
+</div>
+<div class="mb-3">
+    <label for="descripcion" class="form-label">Descripción</label>
+    <textarea class="form-control" name="descripcion" rows="3"></textarea>
+</div>
+<div class="mb-3">
+    <label for="disabledSelect" class="form-label">Selecciona el bebedero</label>
+    <select id="disabledSelect" class="form-select" name="bebedero">
+        {% for bebedero in bebederos %}
+        <option value="{{ bebedero.0 }}">{{ bebedero.1 }}</option>
+        {% endfor %}
+    </select>
+</div>
+<button type="submit" class="btn button-18" id="enviar-btn">Enviar reporte</button>
+</form>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+document.getElementById('report-form').addEventListener('submit', function(e) {
+    e.preventDefault(); 
+    Swal.fire({
+        text: 'Se envió exitosamente tu reporte',
+        confirmButtonColor: "#0A66C2"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            this.submit(); 
+        }
+    });
+});
+</script>
+{% endblock %}

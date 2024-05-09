@@ -1,8 +1,10 @@
-from django.shortcuts import render
 import folium
 from pumaguaAPP.models import bebederos
+from pumaguaAPP.models import Reporte
 from django.db.models import Q
+from datetime import datetime
 from folium.plugins import LocateControl
+from django.shortcuts import render, redirect
 import json
 import os
 
@@ -124,3 +126,26 @@ def imagenes_bebederos(id_bebedero):
 
 def informes(request):
     return render(request,"informes.html")
+
+def reportes(request):
+    # Obtener todos los bebederos de la base de datos
+    bebederos_list = bebederos.objects.values_list('id_bebedero', 'nombre')
+    # Pasar los nombres de los bebederos al contexto del template
+    context = {
+        'bebederos': bebederos_list
+    }
+    if request.method == 'POST':
+        # mandar a inicio.
+        print(request.POST)
+        nombre = request.POST.get('nombre')
+        email = request.POST.get('email')
+        id_bebedero = request.POST.get('bebedero')
+        bebedero = bebederos.objects.get(pk=id_bebedero)
+        fecha_reporte = datetime.now() 
+        descripcion = request.POST.get('descripcion')  
+        reporte = Reporte(nombre=nombre, email=email, bebedero=bebedero, fecha_reporte=fecha_reporte, descripcion=descripcion)
+        reporte.save()
+        
+        return redirect('/')
+    return render(request, 'reportes.html', context)
+
